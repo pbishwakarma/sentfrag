@@ -1,0 +1,13 @@
+env/
+ENV/
+
+.vscode
+
+*.egg*
+eggs/
+
+.cache/
+.tox/
+
+.pytest_cache/
+__pycache__/
