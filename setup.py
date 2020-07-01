@@ -11,6 +11,6 @@ setup(
     description='Automating Gopen\'s techniques',
     author='Prajal Bishwakarma',
     author_email='prajal.b@gmail.com',
-    package_dir={'': 'src'},
-    packages=find_packages(where='src'),
+    package_dir={'': 'sentfrag'},
+    packages=find_packages(where='sentfrag'),
 )
