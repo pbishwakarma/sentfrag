@@ -1,4 +1,4 @@
-from infra.constants import SUBJECT, VERB 
+from sentfrag.infra.constants import SUBJECT, VERB 
 
 PENN_BANK = {
  SUBJECT: ['NN', 'NNS', 'NNP', 'NNPS', 'PRP'],

@@ -15,7 +15,6 @@ def tag(sentence):
     """
     Tag each word in the tokenized sentence with part of speech
     """
-    print(type(sentence))
     if not isinstance(sentence, list) or len(sentence) == 0:
         raise ValueError("Input must be a non empty list of strings")
 
@@ -28,6 +27,7 @@ def chunk(sentence):
     if not isinstance(sentence, list) or len(sentence) == 0:
         raise ValueError("Input must be a non empty list of pos tagged strings")
     
+    # TODO: expand this to cover more combinations
     grammar = '{<DT|PRP.*>?<NN.*>+}'
     rule = RegexpChunkRule.fromstring(grammar)
     parser = RegexpChunkParser([rule])

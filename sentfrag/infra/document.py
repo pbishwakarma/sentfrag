@@ -1,5 +1,6 @@
 from datetime import datetime
 from enum import Enum
+from sentfrag.infra.constants import VERB, STRESS_POSITION, BACKWARDS_LINK, SUBJECT, LABEL_VALUE, LABEL_INDEX, LABEL_LEN, LABELS
 
 class Document(object):
 
@@ -28,10 +29,29 @@ class Sentence(object):
             raise ValueError("Sentence must be a non-empty string")
 
         self._raw = sentence
+        self._words = sentence.split()
         self._tokenized = None
         self._pos = None
         self._chunks = None
 
+        # Indices of sentence componenets
+        self._labels = {
+            STRESS_POSITION: {},
+            VERB: {},
+            SUBJECT: {},
+            BACKWARDS_LINK: {}
+        }
+
+    def set_label(self, label, value):
+        if label in LABELS:
+            label_len = len(value)
+            label_index = self._raw.find(value)
+            self._labels[label] = {
+                LABEL_INDEX: label_index,
+                LABEL_VALUE: value,
+                LABEL_LEN: label_len
+            }
+        
     def get_raw(self):
         return self._raw
 
@@ -52,3 +72,14 @@ class Sentence(object):
         
     def get_pos(self):
         return self._pos
+
+    def __str__(self):
+        return f"""
+        Raw: {self._raw}
+        
+        Subject: {self._labels.get(SUBJECT)}
+        Verb: {self._labels.get(VERB)}
+        Stress Position: {self._labels.get(STRESS_POSITION)}
+        Backwards Link: {self._labels.get(BACKWARDS_LINK)}
+        """
+            
