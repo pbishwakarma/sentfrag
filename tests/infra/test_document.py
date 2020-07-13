@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from infra.document import Document
+from sentfrag.infra.document import Document
 
 def test_document_filepath_prop():
     exp_filepath = "test/filepath"

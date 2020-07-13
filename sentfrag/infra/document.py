@@ -43,7 +43,7 @@ class Sentence(object):
         }
 
     def set_label(self, label, value):
-        if label in LABELS:
+        if label in LABELS and value:
             label_len = len(value)
             label_index = self._raw.find(value)
             self._labels[label] = {
