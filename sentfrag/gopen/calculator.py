@@ -1,3 +1,6 @@
+from sentfrag.infra.document import Document, Sentence
+
+
 class Calculator(object):
     """
     Calculates a score for the document based on the pos_tagging.
@@ -14,10 +17,17 @@ class Calculator(object):
         
         pass
 
-    def calculate(self, doc):
+    def calculate(self, doc: Document):
         """
         Calculate the score of a document.
         """
         
+        pass
+
+    def calculate(self, sent: Sentence):
+        """
+        Calculates the score of a sentence
+        """
+
         pass
 

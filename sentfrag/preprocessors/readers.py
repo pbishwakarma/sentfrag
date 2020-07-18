@@ -1,11 +1,11 @@
 from nltk.tokenize import sent_tokenize
 
+
 class Reader(object):
 
-    def __init__(self, filepath, out_dir):
-        self.filepath = filepath
-        self.out_dir = out_dir
-        
+    def __init__(self, filepath):
+        self._filepath = filepath
+
     def read(self, text):
         """
         Reads the provided text and returns a generator of strings. Each entry
@@ -20,23 +20,30 @@ class Reader(object):
         for sentence in sent_tokenize(text):
             yield sentence.strip()
 
+
 class PDFReader(Reader):
 
-    def __init__(self, file, out_dir):
-        super().__init__(file, out_dir)
+    def __init__(self, file):
+        super().__init__(file)
 
     def read(self):
         text = "foo bar."
         return super().read(text)
 
+
 class TXTReader(Reader):
 
-    def __init__(self, file, out_dir):
-        super().__init__(file, out_dir)
+    def __init__(self, file):
+        super().__init__(file)
 
     def read(self):
-        with open(self.filepath) as f:
+        with open(self._filepath) as f:
             text = f.read()
 
         return super().read(text)
 
+
+SUPPORTED_READERS = {
+    "txt": TXTReader,
+    "pdf": PDFReader
+}
