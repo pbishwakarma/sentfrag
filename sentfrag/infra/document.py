@@ -7,11 +7,12 @@ class Document(object):
     def __init__(self):
         self.__init__(None, None)
 
-    def __init__(self, filepath, author):
+    def __init__(self, filepath, author=None):
         self.filepath = filepath
         self.author = author
         self.created = datetime.now()
         self._score = 0
+        self._sentences = []
 
     @property
     def score(self):
@@ -21,6 +22,17 @@ class Document(object):
     def score(self, score):
         self._score = score
 
+    def set_sentences(self, sentences: list):
+        self._sentences = sentences
+
+    def get_sentences(self):
+        return self._sentences
+        
+    def set_author(self, author):
+        self.author = author
+
+    def get_author(self):
+        return self.author
 
 class Sentence(object):
 
@@ -51,7 +63,13 @@ class Sentence(object):
                 LABEL_VALUE: value,
                 LABEL_LEN: label_len
             }
-        
+    
+    def get_labels(self):
+        return self._labels
+
+    def get_label(self, label):
+        return self._labels.get(label, None)
+
     def get_raw(self):
         return self._raw
 

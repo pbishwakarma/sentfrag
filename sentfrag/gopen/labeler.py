@@ -1,13 +1,14 @@
 import logging
+from typing import Optional
 
 from sentfrag.gopen.nlp import tokenize, tag, chunk, embed
-from sentfrag.infra.document import Sentence
+from sentfrag.infra.document import Document, Sentence
 from sentfrag.infra.constants import BACKWARDS_LINK, STRESS_POSITION, SUBJECT, VERB, LABELS
 from sentfrag.gopen.tagset import PENN_BANK
 
 from scipy import spatial
 
-class Gopen(object):
+class Labeler(object):
 
     def __init__(self, tagset=PENN_BANK):        
         self._tagset = tagset
@@ -26,8 +27,7 @@ class Gopen(object):
         sentence.set_pos(tagged)
         sentence.set_chunks(chunked)
 
-    
-    def label(self, sentence: Sentence, prev_sentence: Sentence, get_back_link: bool):
+    def label(self, sentence: Sentence, prev_sentence: Optional[Sentence], get_back_link: bool):
         chunked = sentence.get_chunks()
         if not chunked:
             self._label(sentence, get_back_link)
@@ -55,7 +55,6 @@ class Gopen(object):
                 
                 phrase_embedding = embed([phrase])
                 phrase_score = 1 - spatial.distance.cosine(prev_embedding, phrase_embedding)
-                print(f"Phrase: {phrase}, Score: {phrase_score}")
                 if phrase_score > score:
                     score = phrase_score
                     back_link = phrase
@@ -93,7 +92,7 @@ class Gopen(object):
 if __name__ == "__main__":
     sentence = Sentence("The boy plays soccer.")
     prev_sentence = Sentence("He plays a sport.")
-    g = Gopen()
+    g = Labeler()
     labeled = g.label(sentence, prev_sentence,True)
     print(labeled)
 
