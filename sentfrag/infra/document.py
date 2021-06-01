@@ -36,6 +36,9 @@ class Document(object):
     def get_author(self):
         return self.author
 
+    def __str__(self):
+        return "\n\n".join(str(p) for p in self._paragraphs)
+
 
 class Paragraph(object):
 
