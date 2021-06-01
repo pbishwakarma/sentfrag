@@ -1,6 +1,8 @@
 from datetime import datetime
 from enum import Enum
 from sentfrag.infra.constants import VERB, STRESS_POSITION, BACKWARDS_LINK, SUBJECT, LABEL_VALUE, LABEL_INDEX, LABEL_LEN, LABELS
+from nltk.tokenize import sent_tokenize
+
 
 class Document(object):
 
@@ -12,7 +14,7 @@ class Document(object):
         self.author = author
         self.created = datetime.now()
         self._score = 0
-        self._sentences = []
+        self._paragraphs = []
 
     @property
     def score(self):
@@ -22,17 +24,36 @@ class Document(object):
     def score(self, score):
         self._score = score
 
-    def set_sentences(self, sentences: list):
-        self._sentences = sentences
+    def set_paragraphs(self, paragraphs: list):
+        self._paragraphs = paragraphs
 
-    def get_sentences(self):
-        return self._sentences
+    def get_paragraphs(self):
+        return self._paragraphs
         
     def set_author(self, author):
         self.author = author
 
     def get_author(self):
         return self.author
+
+
+class Paragraph(object):
+
+    def __init__(self, text):
+        if type(text) != str or len(text) == 0:
+            raise ValueError("Sentence must be a non-empty string")
+
+        self._raw = text
+        self._sentences = [Sentence(s) for s in sent_tokenize(text)]
+
+    def get_sentences(self):
+        return self._sentences
+
+    def set_sentences(self, sentences: list):
+        self._sentences = sentences
+
+    def __str__(self):
+        return self._raw
 
 class Sentence(object):
 
@@ -63,7 +84,7 @@ class Sentence(object):
                 LABEL_VALUE: value,
                 LABEL_LEN: label_len
             }
-    
+
     def get_labels(self):
         return self._labels
 
@@ -100,4 +121,7 @@ class Sentence(object):
         Stress Position: {self._labels.get(STRESS_POSITION)}
         Backwards Link: {self._labels.get(BACKWARDS_LINK)}
         """
+
+    def __eq__(self, other):
+        return type(other) == Sentence and self._raw == other.get_raw()
             

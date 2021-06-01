@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sentfrag.infra.document import Document, Sentence
+from sentfrag.infra.document import Document, Sentence, Paragraph
 
 def test_document_filepath_prop():
     exp_filepath = "test/filepath"
@@ -26,17 +26,17 @@ def test_document_score_setter():
     doc.score = 100
     assert doc.score == 100
 
-def test_sentences_setter():
+def test_paragraph_setter():
     doc = Document(filepath=None, author=None)
-    sentences = [Sentence("test")]
-    doc.set_sentences(sentences)
-    assert doc._sentences == sentences
+    p = Paragraph("Test sentence 1. Test sentence 2")
+    doc.set_paragraphs([p])
+    assert doc._paragraphs == [p]
+    
 
-def test_sentences_getter():
+def test_paragraph_getter():
     doc = Document(filepath=None, author=None)
-    sentences = [Sentence("test")]
-    doc.set_sentences(sentences)
-    assert doc.get_sentences() == sentences 
-
+    p = Paragraph("Test sentence 1. Test sentence 2")
+    doc.set_paragraphs([p])
+    assert doc.get_paragraphs() == [p]
 
 

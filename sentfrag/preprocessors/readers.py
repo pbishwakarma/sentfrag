@@ -21,16 +21,6 @@ class Reader(object):
             yield sentence.strip()
 
 
-class PDFReader(Reader):
-
-    def __init__(self, file):
-        super().__init__(file)
-
-    def read(self):
-        text = "foo bar."
-        return super().read(text)
-
-
 class TXTReader(Reader):
 
     def __init__(self, file):
@@ -44,6 +34,5 @@ class TXTReader(Reader):
 
 
 SUPPORTED_READERS = {
-    "txt": TXTReader,
-    "pdf": PDFReader
+    "txt": TXTReader
 }
