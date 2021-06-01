@@ -6,10 +6,13 @@ import tensorflow_hub as hub
 
 
 #"https://tfhub.dev/google/universal-sentence-encoder-large/5"]
-#TODO: load at app startup from local download
-module_url = "https://tfhub.dev/google/universal-sentence-encoder/4" 
-model = hub.load(module_url)
-  
+#TODO: replace this with TF2 saved models
+MODULE_URL = "https://tfhub.dev/google/universal-sentence-encoder/4" 
+
+def init_model():
+    model = hub.load(MODULE_URL)
+    return model
+
 def tokenize(sentence):
     """
     Split the sentence's raw text into word tokens
@@ -41,7 +44,7 @@ def chunk(sentence):
     parser = RegexpChunkParser([rule])
     return parser.parse(sentence)
 
-def embed(text):
+def embed(model, text):
     """
     Creates an embedding of the provided text using google's universal
     sentence encoder.

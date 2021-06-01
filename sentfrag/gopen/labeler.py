@@ -10,9 +10,10 @@ from scipy import spatial
 
 class Labeler(object):
 
-    def __init__(self, tagset=PENN_BANK):        
+    def __init__(self, model, tagset=PENN_BANK):        
         self._tagset = tagset
         self.logger = logging.getLogger(self.__class__.__name__)
+        self.model = model
         
     def _label(self, sentence: Sentence, get_back_link: bool):
         if not isinstance(sentence, Sentence):
@@ -43,7 +44,7 @@ class Labeler(object):
 
     def get_backward_link(self, sentence: Sentence, prev: Sentence):
         parts = sentence.get_chunks()
-        prev_embedding = embed([prev.get_raw()])
+        prev_embedding = embed(self.model, [prev.get_raw()])
         score = 0
         back_link = None
         try:
@@ -53,7 +54,7 @@ class Labeler(object):
                 else:
                     phrase = " ".join(word[0] for word in part.leaves())
                 
-                phrase_embedding = embed([phrase])
+                phrase_embedding = embed(self.model, [phrase])
                 phrase_score = 1 - spatial.distance.cosine(prev_embedding, phrase_embedding)
                 if phrase_score > score:
                     score = phrase_score
@@ -87,14 +88,5 @@ class Labeler(object):
         *_, last_node =  nounphrases
         sp = " ".join(word[0] for word in last_node.leaves())
         return sp
-
-
-if __name__ == "__main__":
-    sentence = Sentence("The boy plays soccer.")
-    prev_sentence = Sentence("He plays a sport.")
-    g = Labeler()
-    labeled = g.label(sentence, prev_sentence,True)
-    print(labeled)
-
 
 
