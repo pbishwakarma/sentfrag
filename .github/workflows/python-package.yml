@@ -27,13 +27,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install flake8 tox
           pip install nltk
-      - name: Download nltk modules
-        uses: jannekem/run-python-script-action@v1
-        with:
-          script: |
-            import nltk
-            nltk.download('averaged_perceptron_tagger')
-            nltk.download('punkt')
+          python -m nltk.downloader punkt
       - name: Lint with flake8
         run: |
           # stop the build if there are Python syntax errors or undefined names
