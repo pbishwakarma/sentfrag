@@ -32,7 +32,8 @@ jobs:
         with:
           script: |
             import nltk
-            nltk.download()
+            nltk.download('averaged_perceptron_tagger')
+            nltk.download('punkt')
       - name: Lint with flake8
         run: |
           # stop the build if there are Python syntax errors or undefined names
