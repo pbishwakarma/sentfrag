@@ -13,4 +13,8 @@ setup(
     author_email='prajal.b@gmail.com',
     package_dir={'': 'src'},
     packages=find_packages(where='src'),
+    install_requires=[
+        "tensorflow-hub",
+        "nltk"
+    ]
 )

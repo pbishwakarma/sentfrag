@@ -1,6 +1,3 @@
-from nltk.tokenize import sent_tokenize
-
-
 class TXTReader():
 
     def __init__(self, filepath):
