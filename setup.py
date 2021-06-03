@@ -15,6 +15,8 @@ setup(
     packages=find_packages(where='src'),
     install_requires=[
         "tensorflow-hub",
-        "nltk"
+        "nltk",
+        "tensorflow",
+        "scipy"
     ]
 )

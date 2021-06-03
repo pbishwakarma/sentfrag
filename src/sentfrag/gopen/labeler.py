@@ -1,8 +1,9 @@
+from itertools import zip_longest
 import logging
 from typing import Optional
 
 from sentfrag.gopen.nlp import tokenize, tag, chunk, embed
-from sentfrag.infra.document import Document, Sentence
+from sentfrag.infra.document import Document, Sentence, Paragraph
 from sentfrag.infra.constants import BACKWARDS_LINK, STRESS_POSITION, SUBJECT, VERB, LABELS
 from sentfrag.gopen.tagset import PENN_BANK
 
@@ -15,7 +16,7 @@ class Labeler(object):
         self.logger = logging.getLogger(self.__class__.__name__)
         self.model = model
         
-    def _label(self, sentence: Sentence, get_back_link: bool):
+    def _label(self, sentence: Sentence):
         if not isinstance(sentence, Sentence):
             raise ValueError("Input must be of type Sentence")
 
@@ -27,12 +28,12 @@ class Labeler(object):
         sentence.set_tokenized(words)
         sentence.set_pos(tagged)
         sentence.set_chunks(chunked)
-
+            
     def label(self, sentence: Sentence, prev_sentence: Optional[Sentence], get_back_link: bool):
         chunked = sentence.get_chunks()
         if not chunked:
-            self._label(sentence, get_back_link)
-        
+            self._label(sentence)
+
         sentence.set_label(SUBJECT, self.get_subject(sentence))
         sentence.set_label(VERB, self.get_verb(sentence))
         sentence.set_label(STRESS_POSITION, self.get_stress_position(sentence))
@@ -41,6 +42,32 @@ class Labeler(object):
             sentence.set_label(BACKWARDS_LINK, self.get_backward_link(sentence, prev_sentence))
 
         return sentence
+    
+    def label_paragraph(self, p: Paragraph):
+        labeled_sentences = {}
+        sentences = p.get_sentences()
+        for i in range(len(sentences)):
+            labeled_s = self.label(
+                sentence=sentences[i],
+                prev_sentence=labeled_sentences.get(i-1, None),
+                get_back_link=True
+            )
+
+            labeled_sentences[i] = labeled_s
+        
+        p.set_sentences(
+            [v for k,v in sorted(labeled_sentences.items())]
+        )
+        return p
+
+    def label_document(self, d: Document):
+        paragraphs = []
+        #TODO: speeeed
+        for p in d.get_paragraphs():
+            paragraphs.append(self.label_paragraph(p))
+
+        d.set_paragraphs(paragraphs)
+        return d
 
     def get_backward_link(self, sentence: Sentence, prev: Sentence):
         parts = sentence.get_chunks()
@@ -48,6 +75,7 @@ class Labeler(object):
         score = 0
         back_link = None
         try:
+            #TODO: speeeed
             for part in parts:
                 if isinstance(part, tuple):
                     phrase = part[0]
