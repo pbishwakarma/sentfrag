@@ -27,7 +27,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install flake8 tox
           pip install nltk
-          python -m
       - name: Download nltk modules
         uses: jannekem/run-python-script-action@v1
         with:
