@@ -3,7 +3,6 @@ from typing import Optional
 
 from sentfrag.infra.document import Document, Paragraph, Sentence
 from sentfrag.gopen.labeler import Labeler
-from sentfrag.preprocessors.readers import TXTReader, SUPPORTED_READERS
 
 from nltk import sent_tokenize
 
@@ -25,27 +24,13 @@ class DocumentBuilder(object):
         return sentence
 
 
-    def _get_reader(self, filepath: str):
-        """Fetch the reader by reading the file extension"""
-
-        extension = filepath.split(".")[-1]
-        reader = SUPPORTED_READERS.get(extension, None)
-        if not reader:
-            raise ValueError("Unsupported filetype")
-
-        return reader(filepath)
-
-
-    def build_document(self, filepath, author):
-        """Build and return a fully analyzed document"""
-        reader = self._get_reader(filepath)
+    def build_document(self, raw):
+        """Build and return a document"""
     
-        text = reader.read()
-        
-        doc = Document(filepath, author)
+        doc = Document()
     
         #Split into paragraphs
-        _paragraphs = text.split("\n\n")
+        _paragraphs = raw.split("\n\n")
         paragraphs = [Paragraph(p) for p in _paragraphs]
 
         doc.set_paragraphs(paragraphs)

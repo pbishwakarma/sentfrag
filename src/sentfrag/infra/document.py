@@ -7,12 +7,6 @@ from nltk.tokenize import sent_tokenize
 class Document(object):
 
     def __init__(self):
-        self.__init__(None, None)
-
-    def __init__(self, filepath, author=None):
-        self.filepath = filepath
-        self.author = author
-        self.created = datetime.now()
         self._score = 0
         self._paragraphs = []
 
@@ -30,12 +24,6 @@ class Document(object):
     def get_paragraphs(self):
         return self._paragraphs
         
-    def set_author(self, author):
-        self.author = author
-
-    def get_author(self):
-        return self.author
-
     def __str__(self):
         return "\n\n".join(str(p) for p in self._paragraphs)
 

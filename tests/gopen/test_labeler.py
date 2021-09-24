@@ -13,7 +13,9 @@ def l():
 @pytest.fixture(scope="function")
 def doc():
     db = DocumentBuilder()
-    return db.build_document("tests/data/test_doc.txt", "test_author")
+    with open("tests/data/test_doc.txt") as f:
+        text = f.read()
+    return db.build_document(text)
 
 @pytest.fixture(scope="function")
 def p(doc):
